@@ -96,7 +96,7 @@ def solve():
         if reply == [LetterReply.CORRECT]*5:
             print("solved")
             break
-        print("start calculation. wait about 10 minute...")
+        print("start calculation. wait a minute...")
         ans_candidates = filter_by_reply(ans_candidates, input_word, reply)
         input_word = pararell_search(ans_candidates)
 
