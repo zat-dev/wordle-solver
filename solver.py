@@ -89,7 +89,7 @@ def pararell_search(ans_candidates):
 
 def solve():
     ans_candidates = all_5letter_words
-    input_word = "BRUSH"  # pre calculated
+    input_word = "SERAI"  # pre calculated
     for turn in range(1, MAX_TURN+1):
         print(f"[turn{turn}] input '{input_word}' to Wordle and enter the reply")
         reply = list(map(lambda x: LetterReply(int(x)), list(input())))

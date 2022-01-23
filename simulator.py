@@ -16,7 +16,7 @@ def simulate_reply(input_word, answer):
 
 def simulate(answer):
     ans_candidates = all_5letter_words
-    input_word = "BRUSH"  # pre calculated
+    input_word = "SERAI"  # pre calculated
     for turn in range(1, MAX_TURN+1):
         print(f"answer candidates: {len(ans_candidates)}")
         print(f"trun{turn} input: {input_word}")
