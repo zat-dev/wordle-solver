@@ -40,7 +40,8 @@ def filter_by_reply(candidates, input_word, reply):
         if letter_result == LetterReply.NOTIN:
             candidates = list(filter(lambda s: letter not in s, candidates))
         elif letter_result == LetterReply.EXISITS:
-            candidates = list(filter(lambda s: letter in s, candidates))
+            candidates = list(
+                filter(lambda s: letter in s and s[index] != letter, candidates))
         else:
             candidates = list(filter(lambda s: letter == s[index], candidates))
     return candidates
@@ -48,25 +49,29 @@ def filter_by_reply(candidates, input_word, reply):
 
 def search_best_input(args):
     ans_candidates, search_domain = args
-    best = (float("INF"), None)
-    if len(ans_candidates) == 1:
-        return (0, ans_candidates[0])
+    best = ((float("INF"), float("INF")), None)
+    if len(ans_candidates) == 0:
+        return best
+    if len(ans_candidates) <= 2:
+        return ((0, 0), ans_candidates[0])
 
     for word in search_domain:
-        rest_size_sum = 0
-        count = 0
+        worst_rest_size = 0
+        rest_sizes = []
+
         for result in all_reply_patterns:
             rest = filter_by_reply(ans_candidates, word, result)
             if len(rest) == 0:
-                continue
-            rest_size_sum += len(rest)
-            count += 1
-        if count == 0:
+                continue  # this reply pattern is conflict
+            if len(rest) == len(ans_candidates):
+                continue  # no benefit to choose this word
+            worst_rest_size = max(worst_rest_size, len(rest))
+            rest_sizes.append(len(rest))
+        if len(rest_sizes) == 0:
             continue
-        mean_rest_size = rest_size_sum / count
-
-        if mean_rest_size < best[0]:
-            best = (mean_rest_size, word)
+        score = (worst_rest_size, sum(rest_sizes)/len(rest_sizes))
+        if score < best[0]:
+            best = (score, word)
     return best
 
 
@@ -80,32 +85,6 @@ def pararell_search(ans_candidates):
     args = list(map(lambda x: (ans_candidates, x), search_domains))
     results = p.map(search_best_input, args)
     return min(results, key=lambda x: x[0])[1]
-
-
-def simulate_reply(input_word, answer):
-    reply = []
-    for input_letter, ans_letter in zip(input_word, answer):
-        if input_letter == ans_letter:
-            reply.append(LetterReply.CORRECT)
-        elif input_letter in answer:
-            reply.append(LetterReply.EXISITS)
-        else:
-            reply.append(LetterReply.NOTIN)
-    return reply
-
-
-def simulate(answer):
-    ans_candidates = all_5letter_words
-    input_word = "BRUSH"  # pre calculated
-    for turn in range(1, MAX_TURN+1):
-        print(f"answer candidates: {len(ans_candidates)}")
-        print(f"trun{turn} input: {input_word}")
-        reply = simulate_reply(input_word, answer)
-        if reply == [LetterReply.CORRECT]*5:
-            print("solved")
-            break
-        ans_candidates = filter_by_reply(ans_candidates, input_word, reply)
-        input_word = pararell_search(ans_candidates)
 
 
 def solve():
@@ -137,16 +116,9 @@ def parse_args():
     for example, if Wordle reply is all gray, enter the following
        11111
     """)
-    parser.add_argument("-s", "--simulate",
-                        type=str,
-                        metavar="answer",
-                        help="auto simulattion by answer")
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    if args.simulate:
-        simulate(args.simulate)
-    else:
-        solve()
+    solve()
