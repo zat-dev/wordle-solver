@@ -17,19 +17,13 @@ word list is made from https://www.bestwordlist.com/5letterwords.htm
 # example terminal
 ```
 > python .\solver.py
-[turn1] input 'BRUSH' to Wordle and enter the reply
-13111
-start calculation. wait about 10 minute...
-[turn2] input 'TEIND' to Wordle and enter the reply
-11311
-start calculation. wait about 10 minute...
-[turn3] input 'POKAL' to Wordle and enter the reply
-21111
-start calculation. wait about 10 minute...
-[turn4] input 'GAUCY' to Wordle and enter the reply
-11121
-start calculation. wait about 10 minute...
-[turn5] input 'CRIMP' to Wordle and enter the reply
+[turn1] input 'SERAI' to Wordle and enter the reply
+31231
+start calculation. wait a minute...
+[turn2] input 'FLONG' to Wordle and enter the reply
+11112
+start calculation. wait a minute...
+[turn3] input 'SUGAR' to Wordle and enter the reply
 33333
 solved
 ```
