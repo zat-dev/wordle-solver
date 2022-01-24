@@ -8,9 +8,11 @@ LETTER_NUM = 5
 MAX_TURN = 6
 PARARELL = 10
 
+FIRST_ANSWER = "raise"  # pre calculated
+
 
 def get_all_5letter_words():
-    words_file = "./5letter_words.txt"
+    words_file = "./wordle_inputtable.txt"
     all_5letter_words = []
     with open(words_file) as file:
         for line in file:
@@ -89,7 +91,7 @@ def pararell_search(ans_candidates):
 
 def solve():
     ans_candidates = all_5letter_words
-    input_word = "SERAI"  # pre calculated
+    input_word = FIRST_ANSWER
     for turn in range(1, MAX_TURN+1):
         print(f"[turn{turn}] input '{input_word}' to Wordle and enter the reply")
         reply = list(map(lambda x: LetterReply(int(x)), list(input())))
