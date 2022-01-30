@@ -1,13 +1,17 @@
+from collections import defaultdict
 import sys
 from solver import *
 
 
 def simulate_reply(input_word, answer):
     reply = []
+    letter_count = defaultdict(int)
     for input_letter, ans_letter in zip(input_word, answer):
+        letter_count[input_letter] += 1
         if input_letter == ans_letter:
             reply.append(LetterReply.CORRECT)
-        elif input_letter in answer:
+        elif input_letter in answer \
+                and letter_count[input_letter] <= answer.count(input_letter):
             reply.append(LetterReply.EXISITS)
         else:
             reply.append(LetterReply.NOTIN)

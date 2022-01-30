@@ -1,4 +1,5 @@
 import argparse
+from collections import defaultdict
 from enum import IntEnum, auto
 import itertools
 from multiprocessing import Pool
@@ -38,12 +39,20 @@ all_reply_patterns = list(itertools.product(
 
 
 def filter_by_reply(candidates, input_word, reply):
+    letter_count = defaultdict(int)
     for index, (letter, letter_result) in enumerate(zip(input_word, reply)):
+        letter_count[letter] += 1
         if letter_result == LetterReply.NOTIN:
             candidates = list(filter(lambda s: letter not in s, candidates))
         elif letter_result == LetterReply.EXISITS:
             candidates = list(
                 filter(lambda s: letter in s and s[index] != letter, candidates))
+        elif letter in input_word[:index]:
+            # wordle replies gray if already replyed same letter by other color and
+            # no more the same letter exists in answer
+            count = letter_count[letter] - 1
+            candidates = list(
+                filter(lambda s: s.count(letter) == count, candidates))
         else:
             candidates = list(filter(lambda s: letter == s[index], candidates))
     return candidates
