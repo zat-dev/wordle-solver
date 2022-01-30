@@ -1,6 +1,5 @@
 # wordle-solver
 solver of [Wordle](https://www.powerlanguage.co.uk/wordle/) easy mode
-word list is made from https://www.bestwordlist.com/5letterwords.htm
 
 # usage
 * run `python solver.py`
