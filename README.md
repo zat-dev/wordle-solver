@@ -27,3 +27,7 @@ start calculation. wait a minute...
 33333
 solved
 ```
+
+# note
+* this solver can solve any Wordle answer before 5 turn.
+* mean trun is 3.60648 

@@ -9,12 +9,12 @@ MAX_TURN = 6
 PARARELL = 10
 
 FIRST_ANSWER = "raise"  # pre calculated
+WORDS_FILE = "./wordle_inputtable.txt"
 
 
 def get_all_5letter_words():
-    words_file = "./wordle_inputtable.txt"
     all_5letter_words = []
-    with open(words_file) as file:
+    with open(WORDS_FILE) as file:
         for line in file:
             all_5letter_words.append(line.rstrip())
     return all_5letter_words
@@ -69,6 +69,8 @@ def search_best_input(args):
                 continue  # no benefit to choose this word
             worst_rest_size = max(worst_rest_size, len(rest))
             rest_sizes.append(len(rest))
+            if worst_rest_size > best[0][0]:
+                break
         if len(rest_sizes) == 0:
             continue
         score = (worst_rest_size, sum(rest_sizes)/len(rest_sizes))
