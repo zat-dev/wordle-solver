@@ -39,20 +39,24 @@ all_reply_patterns = list(itertools.product(
 
 
 def filter_by_reply(candidates, input_word, reply):
+    results = [
+        (letter_result, index, letter)
+        for index, (letter, letter_result) in enumerate(zip(input_word, reply))
+    ]
+    # should be proccessed from green, yellow, gray becase of letter count
+    results.sort(reverse=True)
     letter_count = defaultdict(int)
-    for index, (letter, letter_result) in enumerate(zip(input_word, reply)):
-        letter_count[letter] += 1
+    for (letter_result, index, letter) in results:
         if letter_result == LetterReply.NOTIN:
             candidates = list(filter(lambda s: letter not in s, candidates))
+            letter_count[letter] += 1
         elif letter_result == LetterReply.EXISITS:
             candidates = list(
                 filter(lambda s: letter in s and s[index] != letter, candidates))
-        elif letter in input_word[:index]:
-            # wordle replies gray if already replyed same letter by other color and
-            # no more the same letter exists in answer
-            count = letter_count[letter] - 1
+            letter_count[letter] += 1
+        elif letter_count[letter] > 0:
             candidates = list(
-                filter(lambda s: s.count(letter) == count, candidates))
+                filter(lambda s: s.count(letter) == letter_count[letter], candidates))
         else:
             candidates = list(filter(lambda s: letter == s[index], candidates))
     return candidates
