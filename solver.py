@@ -1,3 +1,4 @@
+
 import argparse
 from collections import defaultdict
 from enum import IntEnum, auto
@@ -47,18 +48,19 @@ def filter_by_reply(candidates, input_word, reply):
     results.sort(reverse=True)
     letter_count = defaultdict(int)
     for (letter_result, index, letter) in results:
-        if letter_result == LetterReply.NOTIN:
-            candidates = list(filter(lambda s: letter not in s, candidates))
+        if letter_result == LetterReply.CORRECT:
+            candidates = list(filter(lambda s: s[index] == letter, candidates))
             letter_count[letter] += 1
         elif letter_result == LetterReply.EXISITS:
-            candidates = list(
-                filter(lambda s: letter in s and s[index] != letter, candidates))
             letter_count[letter] += 1
+            candidates = list(
+                filter(lambda s: s.count(letter) >= letter_count[letter]
+                       and s[index] != letter, candidates))
         elif letter_count[letter] > 0:
             candidates = list(
                 filter(lambda s: s.count(letter) == letter_count[letter], candidates))
         else:
-            candidates = list(filter(lambda s: letter == s[index], candidates))
+            candidates = list(filter(lambda s: letter not in s, candidates))
     return candidates
 
 
