@@ -29,4 +29,4 @@ solved
 
 # note
 * this solver can solve any Wordle answer before 5 turn by simulation.
-* mean turn is 3.60648 
+* mean turn is 3.6026
